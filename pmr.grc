@@ -33,6 +33,18 @@ options:
     state: enabled
 
 blocks:
+- name: bandwidth
+  id: variable
+  parameters:
+    comment: ''
+    value: '576000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [464, 32.0]
+    rotation: 0
+    state: enabled
 - name: center
   id: variable_qtgui_range
   parameters:
@@ -42,10 +54,10 @@ blocks:
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: int
-    start: '80000000'
-    step: '100000'
-    stop: '110000000'
-    value: '89200000'
+    start: '446006250'
+    step: '12500'
+    stop: '446193750'
+    value: '446081250'
     widget: counter_slider
   states:
     bus_sink: false
@@ -66,26 +78,23 @@ blocks:
     coordinate: [184, 12]
     rotation: 0
     state: enabled
-- name: analog_fm_demod_cf_0
-  id: analog_fm_demod_cf
+- name: analog_nbfm_rx_0
+  id: analog_nbfm_rx
   parameters:
     affinity: ''
     alias: ''
-    audio_decim: '4'
-    audio_pass: '15000'
-    audio_stop: '16000'
-    chan_rate: '200000'
+    audio_rate: '48000'
     comment: ''
-    deviation: '150000'
-    gain: '1.0'
+    max_dev: 5e3
     maxoutbuf: '0'
     minoutbuf: '0'
+    quad_rate: '192000'
     tau: 75e-6
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 316.0]
+    coordinate: [648, 344.0]
     rotation: 0
     state: true
 - name: audio_sink_0
@@ -123,7 +132,7 @@ blocks:
     autoscale: 'False'
     average: '1.0'
     axislabels: 'True'
-    bw: samp_rate
+    bw: bandwidth
     color1: '"blue"'
     color10: '"dark blue"'
     color2: '"red"'
@@ -183,7 +192,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 224.0]
+    coordinate: [448, 232.0]
     rotation: 0
     state: true
 - name: rational_resampler_xxx_0
@@ -192,9 +201,9 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    decim: '50'
+    decim: '10000'
     fbw: '0'
-    interp: '1'
+    interp: '48'
     maxoutbuf: '0'
     minoutbuf: '0'
     taps: '[]'
@@ -203,27 +212,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 344.0]
-    rotation: 0
-    state: true
-- name: rational_resampler_xxx_1
-  id: rational_resampler_xxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    decim: '50'
-    fbw: '0'
-    interp: '48'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    taps: '[]'
-    type: fff
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [808, 344.0]
+    coordinate: [456, 360.0]
     rotation: 0
     state: true
 - name: uhd_usrp_source_0
@@ -263,7 +252,7 @@ blocks:
     ant7: '"RX2"'
     ant8: '"RX2"'
     ant9: '"RX2"'
-    bw0: '500000'
+    bw0: bandwidth
     bw1: '0'
     bw10: '0'
     bw11: '0'
@@ -664,9 +653,8 @@ blocks:
     state: true
 
 connections:
-- [analog_fm_demod_cf_0, '0', rational_resampler_xxx_1, '0']
-- [rational_resampler_xxx_0, '0', analog_fm_demod_cf_0, '0']
-- [rational_resampler_xxx_1, '0', audio_sink_0, '0']
+- [analog_nbfm_rx_0, '0', audio_sink_0, '0']
+- [rational_resampler_xxx_0, '0', analog_nbfm_rx_0, '0']
 - [uhd_usrp_source_0, '0', qtgui_freq_sink_x_0, '0']
 - [uhd_usrp_source_0, '0', rational_resampler_xxx_0, '0']
 
